@@ -1,0 +1,11 @@
+phone,name,email,variable1,variable2,variable3,opted_in
+919876543210,Rahul Sharma,rahul@example.com,ORD-001,https://track.com/abc,15 Feb 2026,true
+918765432109,Priya Patel,priya@example.com,ORD-002,https://track.com/def,16 Feb 2026,true
+917654321098,Amit Kumar,amit@example.com,ORD-003,https://track.com/ghi,17 Feb 2026,true
+916543210987,Sneha Reddy,sneha@example.com,ORD-004,https://track.com/jkl,18 Feb 2026,true
+915432109876,Vikram Singh,vikram@example.com,ORD-005,https://track.com/mno,19 Feb 2026,true
+914321098765,Anjali Desai,anjali@example.com,ORD-006,https://track.com/pqr,20 Feb 2026,true
+913210987654,Rohan Mehta,rohan@example.com,ORD-007,https://track.com/stu,21 Feb 2026,true
+912109876543,Kavita Iyer,kavita@example.com,ORD-008,https://track.com/vwx,22 Feb 2026,true
+911098765432,Deepak Joshi,deepak@example.com,ORD-009,https://track.com/yza,23 Feb 2026,true
+910987654321,Meera Nair,meera@example.com,ORD-010,https://track.com/bcd,24 Feb 2026,true

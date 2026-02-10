@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WhatsApp Bulk Messaging Platform using Meta's Official Cloud API. Manage contacts, templates, and campaigns.">
+  <title>WhatsApp Bulk Messenger — Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">💬</div>
+        <div class="sidebar-brand">
+          <h1>BulkMessenger</h1>
+          <span>WhatsApp Cloud API</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+          <span class="icon">📊</span><span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-page="contacts" onclick="navigateTo('contacts')">
+          <span class="icon">👥</span><span>Contacts</span>
+        </div>
+        <div class="nav-item" data-page="templates" onclick="navigateTo('templates')">
+          <span class="icon">📝</span><span>Templates</span>
+        </div>
+        <div class="nav-item" data-page="campaigns" onclick="navigateTo('campaigns')">
+          <span class="icon">🚀</span><span>Campaigns</span>
+        </div>
+        <div class="nav-item" data-page="create-campaign" onclick="navigateTo('create-campaign')">
+          <span class="icon">➕</span><span>New Campaign</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item" data-page="logs" onclick="navigateTo('logs')">
+          <span class="icon">📋</span><span>Message Logs</span>
+        </div>
+        <div class="nav-item" data-page="settings" onclick="navigateTo('settings')">
+          <span class="icon">⚙️</span><span>Settings</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="demo-badge">🔬 DEMO MODE ACTIVE</div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main-content">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-title" id="pageTitle">📊 Dashboard</div>
+        <div class="topbar-actions">
+          <button class="topbar-btn" onclick="location.reload()">🔄 Refresh</button>
+          <button class="topbar-btn" onclick="showToast('API connected (demo)','info')">📡 API Status</button>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- ==================== DASHBOARD PAGE ==================== -->
+        <section class="page-section active" id="page-dashboard">
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card purple">
+              <div class="stat-header"><span class="stat-label">Total Contacts</span><span class="stat-icon">👥</span></div>
+              <div class="stat-value" id="statContacts">0</div>
+              <div class="stat-sub">Active contacts in database</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-header"><span class="stat-label">Messages Sent</span><span class="stat-icon">✅</span></div>
+              <div class="stat-value" id="statSent">0</div>
+              <div class="stat-sub">Successfully sent messages</div>
+            </div>
+            <div class="stat-card blue">
+              <div class="stat-header"><span class="stat-label">Campaigns</span><span class="stat-icon">🚀</span></div>
+              <div class="stat-value" id="statCampaigns">0</div>
+              <div class="stat-sub">Total campaigns created</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-header"><span class="stat-label">Failed</span><span class="stat-icon">❌</span></div>
+              <div class="stat-value" id="statFailed">0</div>
+              <div class="stat-sub">Failed deliveries</div>
+            </div>
+          </div>
+
+          <!-- Recent Campaigns -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header">
+              <h2>🚀 Recent Campaigns</h2>
+              <button class="btn btn-primary btn-sm" onclick="navigateTo('create-campaign')">➕ New Campaign</button>
+            </div>
+            <div class="card-body">
+              <div id="recentCampaigns">
+                <div class="empty-state">
+                  <div class="empty-icon">🚀</div>
+                  <h3>No campaigns yet</h3>
+                  <p>Create your first campaign to start sending bulk messages via WhatsApp.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="grid-3">
+            <div class="card" style="cursor:pointer" onclick="navigateTo('contacts')">
+              <div class="card-body" style="text-align:center;padding:32px">
+                <div style="font-size:2.5rem;margin-bottom:12px">👥</div>
+                <h3 style="margin-bottom:4px">Manage Contacts</h3>
+                <p style="font-size:0.8rem;color:var(--text-muted)">Upload CSV, add or remove contacts</p>
+              </div>
+            </div>
+            <div class="card" style="cursor:pointer" onclick="navigateTo('templates')">
+              <div class="card-body" style="text-align:center;padding:32px">
+                <div style="font-size:2.5rem;margin-bottom:12px">📝</div>
+                <h3 style="margin-bottom:4px">View Templates</h3>
+                <p style="font-size:0.8rem;color:var(--text-muted)">Browse approved message templates</p>
+              </div>
+            </div>
+            <div class="card" style="cursor:pointer" onclick="navigateTo('create-campaign')">
+              <div class="card-body" style="text-align:center;padding:32px">
+                <div style="font-size:2.5rem;margin-bottom:12px">🚀</div>
+                <h3 style="margin-bottom:4px">Launch Campaign</h3>
+                <p style="font-size:0.8rem;color:var(--text-muted)">Send messages to your audience</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== CONTACTS PAGE ==================== -->
+        <section class="page-section" id="page-contacts">
+          <div class="grid-2">
+            <!-- Upload Card -->
+            <div class="card">
+              <div class="card-header"><h2>📤 Upload Contacts</h2></div>
+              <div class="card-body">
+                <div class="file-upload-zone" id="csvDropZone">
+                  <div class="upload-icon">📂</div>
+                  <p>Drag & drop CSV file here</p>
+                  <p class="upload-hint">or click to browse — Format: phone, name, variable1, variable2, opted_in</p>
+                  <input type="file" accept=".csv" id="csvFileInput" onchange="handleCSVUpload(this)">
+                </div>
+                <div id="uploadResult" style="margin-top:16px"></div>
+              </div>
+            </div>
+            <!-- Add Single Contact -->
+            <div class="card">
+              <div class="card-header"><h2>➕ Add Contact</h2></div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label">Phone Number (with country code)</label>
+                  <input class="form-input" id="addPhone" placeholder="e.g. 919876543210">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Name</label>
+                  <input class="form-input" id="addName" placeholder="e.g. Rahul Sharma">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email (optional)</label>
+                  <input class="form-input" id="addEmail" placeholder="e.g. rahul@example.com">
+                </div>
+                <button class="btn btn-success" onclick="addContact()">➕ Add Contact</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contacts Table -->
+          <div class="card" style="margin-top:24px">
+            <div class="card-header">
+              <h2>👥 All Contacts (<span id="contactCount">0</span>)</h2>
+              <button class="btn btn-outline btn-sm" onclick="loadContacts()">🔄 Refresh</button>
+            </div>
+            <div class="card-body" style="padding:0">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Phone</th><th>Name</th><th>Email</th><th>Variables</th><th>Status</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contactsTableBody">
+                    <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">No contacts yet. Upload a CSV or add manually.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TEMPLATES PAGE ==================== -->
+        <section class="page-section" id="page-templates">
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header">
+              <h2>📝 Message Templates</h2>
+              <span class="badge badge-yellow">Demo Templates</span>
+            </div>
+            <div class="card-body">
+              <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.85rem">
+                These are pre-approved message templates. In production, templates are fetched from your Meta Business Account.
+                Variables like <code style="color:var(--whatsapp)">{{1}}</code> are replaced with actual data when sending.
+              </p>
+              <div class="template-grid" id="templatesGrid"></div>
+            </div>
+          </div>
+
+          <!-- Template Preview -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header"><h2>📋 Template Details</h2></div>
+              <div class="card-body" id="templateDetails">
+                <div class="empty-state">
+                  <div class="empty-icon">👆</div>
+                  <h3>Select a template above</h3>
+                  <p>Click on any template card to see its details and preview.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h2>📱 WhatsApp Preview</h2></div>
+              <div class="card-body" style="display:flex;justify-content:center;padding:32px">
+                <div class="phone-preview" id="phonePreview">
+                  <div class="phone-header">
+                    <div class="phone-avatar">🏢</div>
+                    <div>Your Business</div>
+                  </div>
+                  <div class="phone-body">
+                    <div class="phone-message" id="phoneMessage">
+                      <p>Select a template to preview the message here.</p>
+                      <div class="msg-time">10:30 AM ✓✓</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== CAMPAIGNS PAGE ==================== -->
+        <section class="page-section" id="page-campaigns">
+          <div class="card">
+            <div class="card-header">
+              <h2>🚀 All Campaigns</h2>
+              <button class="btn btn-primary btn-sm" onclick="navigateTo('create-campaign')">➕ New Campaign</button>
+            </div>
+            <div class="card-body" style="padding:0">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Campaign Name</th><th>Template</th><th>Status</th><th>Sent</th><th>Failed</th><th>Created</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="campaignsTableBody">
+                    <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted)">No campaigns yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== CREATE CAMPAIGN PAGE ==================== -->
+        <section class="page-section" id="page-create-campaign">
+          <div class="grid-2">
+            <div>
+              <!-- Step 1 -->
+              <div class="card" style="margin-bottom:20px">
+                <div class="card-header"><h2>① Campaign Details</h2></div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label class="form-label">Campaign Name</label>
+                    <input class="form-input" id="campaignName" placeholder="e.g. Diwali Offers 2026">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Select Template</label>
+                    <select class="form-select" id="campaignTemplate" onchange="onCampaignTemplateChange()">
+                      <option value="">— Select a template —</option>
+                    </select>
+                  </div>
+                  <div id="campaignTemplatePreview"></div>
+                </div>
+              </div>
+
+              <!-- Step 2: Variable mapping -->
+              <div class="card" style="margin-bottom:20px" id="variableMappingCard" hidden>
+                <div class="card-header"><h2>② Variable Mapping</h2></div>
+                <div class="card-body" id="variableMappingBody"></div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="card" style="margin-bottom:20px">
+                <div class="card-header"><h2>③ Select Contacts</h2></div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label class="form-label">Contact Source</label>
+                    <select class="form-select" id="contactSource" onchange="onContactSourceChange()">
+                      <option value="all">All Contacts</option>
+                      <option value="upload">Upload New CSV</option>
+                    </select>
+                  </div>
+                  <div id="campaignContactUpload" hidden>
+                    <div class="file-upload-zone" style="padding:20px">
+                      <div class="upload-icon">📂</div>
+                      <p>Upload CSV for this campaign</p>
+                      <input type="file" accept=".csv" id="campaignCSV" onchange="handleCampaignCSV(this)">
+                    </div>
+                  </div>
+                  <div id="campaignContactCount" style="margin-top:12px;font-size:0.85rem;color:var(--text-secondary)"></div>
+                </div>
+              </div>
+
+              <!-- Launch -->
+              <button class="btn btn-success" style="width:100%;padding:16px;font-size:1rem" id="launchCampaignBtn" onclick="launchCampaign()">
+                🚀 Launch Campaign
+              </button>
+            </div>
+
+            <!-- Right: Live Preview & Progress -->
+            <div>
+              <div class="card" style="margin-bottom:20px">
+                <div class="card-header"><h2>📱 Message Preview</h2></div>
+                <div class="card-body" style="display:flex;justify-content:center;padding:24px">
+                  <div class="phone-preview">
+                    <div class="phone-header">
+                      <div class="phone-avatar">🏢</div>
+                      <div>Your Business</div>
+                    </div>
+                    <div class="phone-body">
+                      <div class="phone-message" id="campaignPhonePreview">
+                        <p>Select a template to see preview...</p>
+                        <div class="msg-time">10:30 AM ✓✓</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campaign Progress -->
+              <div class="card" id="campaignProgressCard" hidden>
+                <div class="card-header">
+                  <h2>📡 Campaign Progress</h2>
+                  <div class="live-indicator"><div class="live-dot"></div> LIVE</div>
+                </div>
+                <div class="card-body">
+                  <div class="progress-container">
+                    <div class="progress-info">
+                      <span id="progressText">Sending...</span>
+                      <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+                    </div>
+                  </div>
+                  <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+                    <div class="stat-card green" style="padding:14px">
+                      <div class="stat-label" style="font-size:0.7rem">Sent</div>
+                      <div class="stat-value" id="progSent" style="font-size:1.5rem">0</div>
+                    </div>
+                    <div class="stat-card red" style="padding:14px">
+                      <div class="stat-label" style="font-size:0.7rem">Failed</div>
+                      <div class="stat-value" id="progFailed" style="font-size:1.5rem">0</div>
+                    </div>
+                  </div>
+                  <div id="campaignLogsList" style="margin-top:16px;max-height:250px;overflow-y:auto"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== LOGS PAGE ==================== -->
+        <section class="page-section" id="page-logs">
+          <div class="card">
+            <div class="card-header">
+              <h2>📋 Message Logs</h2>
+              <button class="btn btn-outline btn-sm" onclick="loadLogs()">🔄 Refresh</button>
+            </div>
+            <div class="card-body" style="padding:0">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr><th>Phone</th><th>Name</th><th>Template</th><th>Status</th><th>Message ID</th><th>Time</th></tr>
+                  </thead>
+                  <tbody id="logsTableBody">
+                    <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">No message logs yet. Run a campaign first.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== SETTINGS PAGE ==================== -->
+        <section class="page-section" id="page-settings">
+          <div class="card">
+            <div class="card-header"><h2>⚙️ API Configuration</h2></div>
+            <div class="card-body">
+              <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.85rem">
+                Configure your WhatsApp Cloud API credentials. These are stored in the <code>.env</code> file on the server.
+              </p>
+              <div class="form-group">
+                <label class="form-label">WhatsApp API URL</label>
+                <input class="form-input" value="https://graph.facebook.com/v18.0" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number ID</label>
+                <input class="form-input" placeholder="Found in Meta Developer Dashboard" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Access Token</label>
+                <input class="form-input" type="password" value="••••••••••••••••" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Rate Limit (ms between messages)</label>
+                <input class="form-input" value="200" disabled>
+              </div>
+              <p style="color:var(--yellow);font-size:0.8rem;margin-top:8px">⚠️ Edit the <code>.env</code> file on the server to change these settings. Restart the server after changes.</p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:24px">
+            <div class="card-header"><h2>📘 Quick Setup Guide</h2></div>
+            <div class="card-body" style="color:var(--text-secondary);font-size:0.85rem;line-height:1.8">
+              <ol style="padding-left:20px">
+                <li>Create a <strong>Meta Developer Account</strong> at <a href="https://developers.facebook.com" target="_blank" style="color:var(--accent-secondary)">developers.facebook.com</a></li>
+                <li>Create a new <strong>Business App</strong> and add the <strong>WhatsApp</strong> product</li>
+                <li>Go to WhatsApp → API Setup → Copy your <strong>Phone Number ID</strong> and <strong>Access Token</strong></li>
+                <li>Paste them in your <code>.env</code> file</li>
+                <li>Create <strong>Message Templates</strong> in Meta Business Suite and wait for approval</li>
+                <li>Set up the <strong>Webhook URL</strong> (use ngrok for development)</li>
+                <li>Upload contacts and start sending campaigns! 🎉</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Campaign Detail Modal -->
+  <div class="modal-overlay" id="campaignModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalCampaignTitle">Campaign Details</h2>
+        <button class="modal-close" onclick="closeModal('campaignModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="modalCampaignBody"></div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
